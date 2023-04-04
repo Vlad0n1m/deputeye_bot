@@ -16,7 +16,7 @@ conn = sqlite3.connect('streets.db')
 cur = conn.cursor()
 
 logging.basicConfig(level=logging.INFO)
-bot = Bot(token='')
+bot = Bot(token='6172793052:AAEA4xr2DLqbjlDiwMDGULbGo5MA7BGdnXc')
 storage = MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
 
@@ -184,8 +184,9 @@ async def city_handler(message: types.Message, state: FSMContext):
         # Сохраняем город в FSM и переходим в следующее состояние (STATE_STREET)
         await state.update_data(city=city)
         await RegistrationStates.STATE_STREET.set()
-        with open('path/to/your/gif/file.gif', 'rb') as gif:
-            await bot.send_animation(chat_id=message.chat.id, animation=gif)
+        global gif_msg
+        with open('gif.gif', 'rb') as gif:
+            gif_msg = await bot.send_animation(chat_id=message.chat.id, animation=gif)
         choose_street_msg = await message.answer(f'🏘 Выберите улицу.\nДопустим вы живёте по адресу Хименко напишите боту "улица Хименко" только потом бот предложит вам выбрать номер дома.\nНапишите <code>@deputeye_bot</code> в строку ввода сообщения и он поможет вам найти улицу.', parse_mode="HTML", reply_markup=streets_kb)
     else:
         cities_keyboard = ReplyKeyboardMarkup(
@@ -223,7 +224,7 @@ async def street_handler(message: types.Message, state: FSMContext):
             numbers_kb.add(btn)
         await state.update_data(street=street)
         await RegistrationStates.STATE_NUMBER.set()
-        # await big_message.delete()
+        await gif_msg.delete()
         global number_nice
         number_nice = await message.answer("✅ Отлично!\n#️⃣ Выбери доступный номер улицы.", reply_markup=numbers_kb)
     else:
