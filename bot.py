@@ -16,7 +16,7 @@ conn = sqlite3.connect('streets.db')
 cur = conn.cursor()
 
 logging.basicConfig(level=logging.INFO)
-bot = Bot(token='6172793052:AAEA4xr2DLqbjlDiwMDGULbGo5MA7BGdnXc')
+bot = Bot(token='')
 storage = MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
 
